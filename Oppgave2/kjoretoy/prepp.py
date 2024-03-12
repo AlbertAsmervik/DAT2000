@@ -14,7 +14,17 @@ def prepp_kjoretoy(inn_fil: Union[str, pathlib.Path]) -> pl.DataFrame:
 
     # Casting av dato-kolonner.
     # !!!! ERSTATT MED DIN KODE:
-    assert False, "Fjern denne asserten og putt inn din kode"
+    df = df.with_columns(
+        tekn_reg_f_g_n=pl.col("tekn_reg_f_g_n").cast(str).str.pad_start(8, "0").str.to_date(format="%Y%m%d"),
+        tekn_neste_pkk=pl.when(
+            pl.col("tekn_neste_pkk").str.len_bytes() == 8
+        ).then(
+            pl.col("tekn_neste_pkk").cast(str).str.pad_start(8, "0").str.to_date(format="%Y%m%d", strict=False)
+        ).otherwise(
+            pl.lit(None)
+        ),
+        tekn_reg_eier_dato=pl.col("tekn_reg_eier_dato").cast(str).str.pad_start(8, "0").str.to_date(format="%Y%m%d")
+    )
 
     # Denne er viktig fordi data er ikke unikt identifisert av kolonnene våre
     # Vi får trøbbel når vi skal gjøre group by senere - noen (forskjellige) biler har identiske data.
@@ -56,7 +66,9 @@ def prepp_kjoretoy(inn_fil: Union[str, pathlib.Path]) -> pl.DataFrame:
 
     # Vi lager en egen elbil-kolonne
     # !!!! ERSTATT MED DIN KODE:
-    assert False, "Fjern denne asserten og putt inn din kode"
+    df = df.with_columns(
+        elbil=pl.col("tekn_drivstoff").eq(pl.lit("5"))
+    )
 
     # Vi vil også ha inn skriftlig beskrivelse av bilmerket
     merkekode = pl.read_csv(STATIC_DATA / "merkekode.csv", separator=";").rename(

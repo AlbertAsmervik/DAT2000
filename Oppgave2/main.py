@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, literal
 import os
 
+
 load_dotenv()
 connstr = os.environ.get("CONN")
 if connstr is None:

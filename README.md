@@ -1,2 +1,2 @@
-# DAT2000
-Obligatorisk oppgave i database 2.
+# Utgangspunkt for del 2 av obligatorisk oppgave i DAT2000
+# Se oppgavetekst i canvas

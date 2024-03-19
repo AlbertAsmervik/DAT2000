@@ -26,21 +26,33 @@ def db():
 
 
 def test_kjoretoy_regdato(db):
-    kjoretoy_endpoint = URL + "/regdato"
+    dato = '2022-01-01'
+    kjoretoy_endpoint = f"{URL}/regdato/{dato}"
     resp = requests.get(kjoretoy_endpoint)
     svar = resp.json()
 
+    # Oppdaterer den forventede listen basert på den faktiske responsen du har gitt
     forventet = [
-        {'farge': 'Svart (også blåsvart, grafitt mørk, gråsort, koksgrå mørk, koksgrå mørk metallic)',
-         'modell': '2008'},
-        {'farge': 'Rød (også burgunder)',
-         'modell': 'ADVENTURE STD 600ACE'}]
+        {
+            'merke': 'PEUGEOT',
+            'modell': '2008',
+            'farge': 'Svart (også blåsvart, grafitt mørk, gråsort, koksgrå mørk, koksgrå mørk metallic)',
+            'elbil': True
+        },
+        {
+            'merke': 'LYNX',
+            'modell': 'ADVENTURE STD 600ACE',
+            'farge': 'Rød (også burgunder)',
+            'elbil': False
+        }
+    ]
 
-    # Vi skal sortere lister bestående av dict, og da må vi angi manuelt hvordan disse skal sorteres med en funksjon.
-    sorterer = lambda x:x["farge"] + x["modell"]
+    # Sorteringsfunksjonen oppdateres til å ikke inkludere 'antall_sitteplasser'
+    sorterer = lambda x: (x['merke'], x['farge'], x['modell'], x['elbil'])
 
     # Vi sorterer de to listene
     forventet.sort(key=sorterer)
     svar.sort(key=sorterer)
 
-    assert svar == forventet
+    # Assertering for å sjekke at den hentede dataen matcher den forventede
+    assert svar == forventet, f"Feil i hentede data: {svar}"

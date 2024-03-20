@@ -5,6 +5,7 @@ import requests
 from kjoretoy import last_opp_kjoretoy, prepp_kjoretoy
 from dotenv import load_dotenv
 import os
+
 logging.basicConfig(level=logging.DEBUG)
 
 THIS_FOLDER = pathlib.Path(__file__).parent
@@ -56,3 +57,39 @@ def test_kjoretoy_regdato(db):
 
     # Assertering for å sjekke at den hentede dataen matcher den forventede
     assert svar == forventet, f"Feil i hentede data: {svar}"
+
+
+def test_pkkdato(db):
+    pkk_dato = '2025-10-14'
+    pkkdato_endpoint = f"http://127.0.0.1:8000/pkkdato/{pkk_dato}"
+    resp = requests.get(pkkdato_endpoint)
+    svar = resp.json()
+
+    # Print statement for å hjelpe med å hente ut de forventede verdiene under utvikling
+    print(svar)
+
+    forventet = [
+        {
+            "farge": "Hvit (også antikkhvit, offwhite)",
+            "modell": "208",
+            "merke": "PEUGEOT",
+            "elbil": True,
+            "forstegangsregistrering": "2022-01-19"
+        },
+        {
+            "farge": "Grå",
+            "modell": "Kona",
+            "merke": "HYUNDAI",
+            "elbil": True,
+            "forstegangsregistrering": "2022-01-20"
+        }
+    ]
+
+    # Hvis rekkefølgen på dataene ikke er garantert, må du sortere dem før du sammenligner
+    svar.sort(key=lambda x: (x['merke'], x['modell'], x['farge'], x['elbil'], x['forstegangsregistrering']))
+    forventet.sort(key=lambda x: (x['merke'], x['modell'], x['farge'], x['elbil'], x['forstegangsregistrering']))
+
+    # Assertering for å sjekke at den hentede dataen matcher den forventede
+    assert svar == forventet, f"Feil i hentede data: {svar}"
+
+

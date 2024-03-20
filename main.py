@@ -2,7 +2,7 @@
 from fastapi import FastAPI, Path
 from kjoretoy import kjoretoy_tabell
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, literal, select
+from sqlalchemy import create_engine, literal
 import os
 
 

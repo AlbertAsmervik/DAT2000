@@ -57,13 +57,34 @@ def test_kjoretoy_regdato(db):
     # Assertering for å sjekke at den hentede dataen matcher den forventede
     assert svar == forventet, f"Feil i hentede data: {svar}"
 
+def test_kjoretoy_regdato_ny_dato(db):
+    kjoretoy_endpoint = URL + "/regdato/2022-01-02"
+    resp = requests.get(kjoretoy_endpoint)
+    svar = resp.json()
+
+    # Opprett forventet respons basert på den faktiske responsen du har gitt
+    forventet = [
+        {
+            'merke': 'Volvo',
+            'modell': 'FH',
+            'farge': 'Grå',
+            'elbil': False
+        }
+    ]
+
+    sorterer = lambda x: (x['merke'], x['farge'], x['modell'], x['elbil'])
+
+    forventet.sort(key=sorterer)
+    svar.sort(key=sorterer)
+
+    assert svar != forventet, "Responsen skal være forskjellig for forskjellige datoer"
+
 
 def test_pkkdato(db):
     pkkdato_endpoint = URL + "/pkkdato/2025-10-14"
     resp = requests.get(pkkdato_endpoint)
     svar = resp.json()
 
-    # Print statement for å hjelpe med å hente ut de forventede verdiene under utvikling
     print(svar)
 
     forventet = [
@@ -83,11 +104,6 @@ def test_pkkdato(db):
         }
     ]
 
-    # Hvis rekkefølgen på dataene ikke er garantert, må du sortere dem før du sammenligner
-    svar.sort(key=lambda x: (x['merke'], x['modell'], x['farge'], x['elbil'], x['forstegangsregistrering']))
-    forventet.sort(key=lambda x: (x['merke'], x['modell'], x['farge'], x['elbil'], x['forstegangsregistrering']))
-
-    # Assertering for å sjekke at den hentede dataen matcher den forventede
     assert svar == forventet, f"Feil i hentede data: {svar}"
 
 

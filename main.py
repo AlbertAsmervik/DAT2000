@@ -20,8 +20,8 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/regdato/{regdato}")
-async def read_regdato(regdato: str = Path(..., title="Registreringsdato", description="Dato for registrering i formatet YYYY-MM-DD")):
+@app.get("/regdato/{dato}")
+async def read_regdato(dato):
     with engine.connect() as conn:
         res = conn.execute(
             kjoretoy.select().with_only_columns(
@@ -30,7 +30,7 @@ async def read_regdato(regdato: str = Path(..., title="Registreringsdato", descr
                 kjoretoy.c.tekn_modell,
                 kjoretoy.c.elbil
             ).where(
-                kjoretoy.c.tekn_reg_f_g_n == literal(regdato))
+                kjoretoy.c.tekn_reg_f_g_n == literal(dato))
         )
 
         out_list = []
@@ -45,8 +45,8 @@ async def read_regdato(regdato: str = Path(..., title="Registreringsdato", descr
 
         return out_list
 
-@app.get("/pkkdato/{pkk_dato}")
-async def pkkdato(pkk_dato: str = Path(..., title="Dato for neste PKK", description="Dato for neste planlagte EU-kontroll i formatet YYYY-MM-DD")):
+@app.get("/pkkdato/{dato}")
+async def pkkdato(dato):
     with engine.connect() as conn:
         res = conn.execute(
             kjoretoy.select().with_only_columns(
@@ -55,7 +55,7 @@ async def pkkdato(pkk_dato: str = Path(..., title="Dato for neste PKK", descript
                  kjoretoy.c.merke_navn,
                  kjoretoy.c.elbil,
                  kjoretoy.c.tekn_reg_f_g_n
-            ).where(kjoretoy.c.tekn_neste_pkk == pkk_dato)  # Anta at pkk_dato er i riktig format
+            ).where(kjoretoy.c.tekn_neste_pkk == literal(dato))
         )
 
         out_list = []

@@ -27,8 +27,7 @@ def db():
 
 
 def test_kjoretoy_regdato(db):
-    dato = '2022-01-01'
-    kjoretoy_endpoint = f"{URL}/regdato/{dato}"
+    kjoretoy_endpoint = URL + "/regdato/2022-01-01"
     resp = requests.get(kjoretoy_endpoint)
     svar = resp.json()
 
@@ -60,8 +59,7 @@ def test_kjoretoy_regdato(db):
 
 
 def test_pkkdato(db):
-    pkk_dato = '2025-10-14'
-    pkkdato_endpoint = f"http://127.0.0.1:8000/pkkdato/{pkk_dato}"
+    pkkdato_endpoint = URL + "/pkkdato/2025-10-14"
     resp = requests.get(pkkdato_endpoint)
     svar = resp.json()
 

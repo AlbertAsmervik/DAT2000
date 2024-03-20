@@ -104,6 +104,9 @@ def test_pkkdato(db):
         }
     ]
 
+    svar.sort(key=lambda x: (x['merke'], x['modell'], x['farge'], x['elbil'], x['forstegangsregistrering'])),
+    forventet.sort(key=lambda x: (x['merke'], x['modell'], x['farge'], x['elbil'], x['forstegangsregistrering']))
+
     assert svar == forventet, f"Feil i hentede data: {svar}"
 
 

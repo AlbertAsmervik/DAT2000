@@ -13,9 +13,9 @@ def kjoretoy_tabell() -> Table:
         Column("merke_navn", String(255)),
         Column("tekn_modell", String(255)),
         Column("tekn_drivstoff", String(255)),
-        Column("tekn_neste_pkk", Date),
+        Column("tekn_neste_pkk", Date, index=True),
         Column("farge_navn", String(255)),
         Column("elbil", Boolean),
-        Column("tekn_sitteplasser_totalt", Integer)
+
     )
     return kjoretoy
